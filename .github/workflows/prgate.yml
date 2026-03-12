@@ -19,14 +19,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run PRGate review
-        uses: prgate/prgate@main
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          config-path: .prgate.yaml
-          policy-path: org-policy.yaml
-          llm-provider: anthropic
-          llm-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          python-version: "3.12"
+
+      - name: Install PRGate
+        run: pip install "git+https://github.com/prgate/prgate.git@main"
+
+      - name: Run PRGate review
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CONFIG_PATH: .prgate.yaml
+          POLICY_PATH: org-policy.yaml
+          LLM_PROVIDER: anthropic
+          LLM_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: prgate run
 
       - name: Comment PR if review failed
         if: failure()
