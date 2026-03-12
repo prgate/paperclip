@@ -26,8 +26,13 @@ jobs:
 
       - name: Install PRGate
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pip install "git+https://x-access-token:${GH_TOKEN}@github.com/prgate/prgate.git@main"
+          GH_TOKEN: ${{ secrets.PRGATE_REPO_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::Add PRGATE_REPO_TOKEN to repo secrets (PAT with repo scope for prgate/prgate)"
+            exit 1
+          fi
+          pip install "git+https://x-access-token:${GH_TOKEN}@github.com/prgate/prgate.git@main"
 
       - name: Run PRGate review
         env:
