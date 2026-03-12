@@ -1,0 +1,10 @@
+policy_version: 1.0.0
+allow_repo_override: true
+severity_threshold: medium
+
+org_rules:
+  critical: []
+  high: []
+  medium: []
+  low: []
+  info: []
